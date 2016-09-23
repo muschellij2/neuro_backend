@@ -1,4 +1,6 @@
 library(httr)
+library(yaml)
+library(jsonlite)
 read_dcf <- function(path) {
   fields <- colnames(read.dcf(path))
   dcf = as.list(read.dcf(path, keep.white = fields, all = TRUE)[1, ])
@@ -136,6 +138,23 @@ create_repo = function(pkg) {
   return(new_repo)
 }
 
+get_commits = function(pkg) {
+  new_repo <- gh::gh(paste0(
+    "GET /repos/neuroconductor/",
+    pkg, "/commits")
+  )
+  return(new_repo)
+}
+
+
+get_current_commit = function(pkg) {
+  new_repo = get_commits(pkg)
+  res = new_repo[[1]]$sha
+  return(res)
+}
+
+
+
 delete_repo = function(pkg) {  
   del = gh("DELETE /repos/:owner/:repo", 
     owner = "neuroconductor",
@@ -153,8 +172,7 @@ get_repo_names = function() {
   sapply(repos, `[[`, "name")
 }
 
-
-enable_all_travis = function(){
+travis_enable_status = function() {
   h <- get_hooks()
   pkgs = sapply(h$hooks, `[[`, "name")
   active = sapply(h$hooks, `[[`, "active")
@@ -164,12 +182,36 @@ enable_all_travis = function(){
     } 
     return(x)
   })
+  ids = sapply(h$hooks, `[[`, "id")
+
+  df = data.frame(package = pkgs,
+    active = active,
+    id = ids,
+    stringsAsFactors = FALSE)
+  return(df)
+}
+
+enabled_travis = function() {
+  df = travis_enable_status()
+  pkgs = df$package[ df$active]
+  return(pkgs)
+}
+
+is_enabled_travis = function(pkg) {
+  pkg %in% enabled_travis()
+}
+
+enable_all_travis = function(){
+  df = travis_enable_status()
+  active = df$active
+  pkgs = df$package
+  ids = df$id
+
   if (all(active)) {
     return(TRUE)
   } else {
     non_active = pkgs[!active]
-    ids = h$hooks[!active]
-    ids = sapply(ids, `[[`, "id")
+    ids = ids[!active]
     res = sapply(ids, my_enable_hook)
     return(res)
   }
@@ -224,4 +266,77 @@ get_sha = function(stub,
 have_travis = function(local_path){
   f = file.path(local_path, ".travis.yml")
   file.exists(f)
+}
+
+
+get_builds = function(pkg){
+  token = Sys.getenv("TRAVIS_CI_TOKEN")
+  base = "https://api.travis-ci.org"
+  path = paste0(
+    "/repos/neuroconductor/", 
+    pkg, 
+    "/builds")
+  # body = list(hook = list(
+  #   id = id, 
+  #   active = TRUE))
+  url <- paste0(base, path)
+  
+  htoken = add_headers(
+    Authorization = paste0("token ", token))
+
+  req <- httr::GET(url, 
+    encode = "json", 
+    config= htoken,
+  add_headers(
+    Accept = "application/vnd.travis-ci.2+json")
+    )
+    # accept("application/vnd.travis-ci.2+json"),
+    # user_agent("MyClient/1.0.0"))
+  stop_for_status(req)
+  content(req)
+}
+
+
+
+fix_yaml = function(yaml_file) {
+  parsed_yaml = yaml.load_file(yaml_file)
+  tags = names(parsed_yaml)
+  btags = c("use_bioc", "bioc_required")
+  tag_check = btags %in% tags
+  if (!all(tag_check)) {
+    btags = btags[ !tag_check ]
+    for (itag in btags) {
+      parsed_yaml[itag] = TRUE
+    }
+    yml = as.yaml(parsed_yaml)
+    writeLines(yml, con = yaml_file)
+  } 
+}
+
+get_travis_token = function(
+    gh_token = c(Sys.getenv("GITHUB_TOKEN"), 
+      Sys.getenv("GITHUB_PAT")), 
+    base = c("https://api.travis-ci.org", 
+      "https://api.travis-ci.com")) {
+  gh <- gh_token[gh_token != ""][1]
+  base <- match.arg(base)
+  req <- httr::POST(paste0(base, 
+    "/auth/github"), 
+    httr::add_headers(
+      Accept = "application/vnd.travis-ci.2+json"),
+    user_agent("MyClient/1.0.0"), 
+    body = list(github_token = gh), 
+    encode = "json")
+  stop_for_status(req)  
+  httr::content(req)$access_token
+}
+
+make_travis = function(local_path){
+  template_path <- system.file(
+    "templates", "travis.yml", 
+    package = "devtools", 
+          mustWork = TRUE)
+  outfile = file.path(local_path,
+    ".travis.yml")
+  file.copy(template_path, outfile)
 }

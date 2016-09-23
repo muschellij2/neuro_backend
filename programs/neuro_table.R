@@ -40,6 +40,11 @@ dep_mat = sapply(repo_infos, function(x){
 rownames(dep_mat) = neuro_deps
 # dep_mat = t(dep_mat)
 
+ograph = graph_from_adjacency_matrix(
+    dep_mat,
+    mode = "directed")
+
+
 install_order = list()
 i = 1
 while(length(neuro_deps) > 0) {

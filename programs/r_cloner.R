@@ -6,6 +6,7 @@ library(git2r)
 library(devtools)
 library(travisci)
 library(gh)
+library(dplyr)
 source("worker_functions.R")
 
 ##########################################
@@ -20,7 +21,7 @@ outfile = file.path(pop_path,
     "install_order.Rda")
 
 load(outfile)
-pkg = install_order[1]
+pkg = install_order[4]
 
 outfile = file.path(pop_path,
     "commit_table.Rda")
@@ -30,8 +31,9 @@ if (!file.exists(outfile)) {
 }
 load(outfile)
 
-
-
+####################################
+# Load Repo
+####################################
 tab = file.path(tab_path, 
   paste0(pkg, ".rda"))
 load(tab)
@@ -86,6 +88,7 @@ if (!("biocViews" %in% nres)) {
   res$biocViews = ""
 }
 
+# run if have neuroconductor dependencies
 if (nrow(neuro_deps) > 0) {
 
   remotes = get_remotes(res)
@@ -133,40 +136,96 @@ if (nrow(neuro_deps) > 0) {
   fixed_remotes = paste(fixed, collapse = ", ")
   res$Remotes = fixed_remotes
 } 
-res = as.data.frame(res, stringsAsFactors = FALSE)
 
-write.dcf(x = res, file = dcf, keep.white = fields)
+res = as.data.frame(res, 
+  stringsAsFactors = FALSE)
 
+write.dcf(x = res, file = dcf, 
+  keep.white = fields)
+
+###################################
+# Adding to TRAVIS yaml
+###################################
 add_travis = !have_travis(local_path)
 if (add_travis) {
-  use_travis(pkg = local_path)
+  # use_travis(pkg = local_path)
+  make_travis(local_path)
 }
+
+############################
+# Adding use_bioc and bioc_required
+# to the YAML so it installs bioc packages
+############################
+yaml_file = file.path(local_path, 
+    ".travis.yml")
+fix_yaml(yaml_file)
+
 # save(repo, dcf)
 ##############################
 # R COMMAND CHECK
 ##############################
-
 add(repo, path = dcf)
 if (add_travis) {
-  add(repo, 
-  path = file.path(local_path, 
-    ".travis.yml"))
+  add(repo, path = yaml_file)
 }
 stat = status(repo)
 staged = stat$staged$modified
 if (length(staged) > 0) { 
-  cid = commit(repo, 
-    message = "neuroc_ready")
+  this_commit = commit(repo, 
+    message = "neuroc_test")
+  this_cid = this_commit@sha
 }
+current_commit_id = commits(repo)[[1]]@sha
+
 cred = cred_token()
 push_id = push(repo, name = "neuroc", 
   refspec = "refs/heads/master",
   credentials = cred)
-sync_users()  
-enable_all_travis()
+# get neuroc commit_id from GH
+gh_curr_id = get_current_commit(pkg)
 
+if (!is_enabled_travis(pkg)){
+  sync_users()
+  Sys.sleep(10)
+  enable_all_travis()
+  travis_enable_status()
+  # re-trigger
+  push_id = push(repo, name = "neuroc", 
+    refspec = "refs/heads/master",
+    credentials = cred)
+}
+  ######################################
+  # Getting build information
+  ######################################
+  res = get_builds(pkg)
+  cids = lapply(res$commits, `[[`, "sha")
+  starts = lapply(res$builds, `[[`, 
+    "started_at")
+  nums = lapply(res$builds, `[[`, 
+    "number")  
+  states = lapply(res$builds, `[[`, 
+    "state")
+  df = mapply(function(x, y, z) {
+    nonull = function(x) {
+      if (is.null(x)) {
+        x = NA
+      }
+      x
+    }
+    data.frame(num = nonull(x),
+      cid = nonull(y),
+      state = nonull(z)
+      )
+  }, nums, cids, states,
+    SIMPLIFY = FALSE)
+  df = do.call("rbind", df)
+  df$num = as.numeric(df$num)
+  df = df %>% filter(cid %in% this_cid)
+  df = df %>% arrange()
+  # res$builds[[2]]$state
+  df = df[ df$cid %in% cid,]
 
-
+# }
 ### add biocViews
 
 # 
