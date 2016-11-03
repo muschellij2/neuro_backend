@@ -21,7 +21,7 @@ outfile = file.path(pop_path,
     "install_order.Rda")
 
 load(outfile)
-pkg = install_order[4]
+pkg = install_order[5]
 
 outfile = file.path(pop_path,
     "commit_table.Rda")
@@ -221,9 +221,9 @@ if (!is_enabled_travis(pkg)){
   df = do.call("rbind", df)
   df$num = as.numeric(df$num)
   df = df %>% filter(cid %in% this_cid)
-  df = df %>% arrange()
+  # df = df %>% arrange(# FIND lAST ONE)
   # res$builds[[2]]$state
-  df = df[ df$cid %in% cid,]
+  # df = df[ df$cid %in% cid,]
 
 # }
 ### add biocViews

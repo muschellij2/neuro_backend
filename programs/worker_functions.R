@@ -1,9 +1,13 @@
 library(httr)
 library(yaml)
 library(jsonlite)
-read_dcf <- function(path) {
-  fields <- colnames(read.dcf(path))
-  dcf = as.list(read.dcf(path, keep.white = fields, all = TRUE)[1, ])
+read_dcf <- function(path, rewrite = TRUE) {
+  file = file(path)
+  on.exit({
+    close(file)
+  })
+  fields <- colnames(read.dcf(file))
+  dcf = as.list(read.dcf(file, keep.white = fields, all = TRUE)[1, ])
   return(list(fields = fields,
               dcf = dcf))
 }
@@ -67,8 +71,10 @@ parse_one_remote <- function(x) {
     stop("Malformed remote specification '", x, "'", call. = FALSE)
   }
   fun <- tryCatch(get(paste0(tolower(type), "_remote"),
-                      envir = asNamespace("devtools"), mode = "function", inherits = FALSE),
-                  error = function(e) stop("Unknown remote type: ", type, call. = FALSE))
+                      envir = asNamespace("devtools"), 
+                      mode = "function", inherits = FALSE),
+                  error = function(e) stop("Unknown remote type: ", 
+                    type, call. = FALSE))
   
   fun(repo)
 }
@@ -301,12 +307,24 @@ get_builds = function(pkg){
 fix_yaml = function(yaml_file) {
   parsed_yaml = yaml.load_file(yaml_file)
   tags = names(parsed_yaml)
-  btags = c("use_bioc", "bioc_required")
-  tag_check = btags %in% tags
+  btags = c("use_bioc", "bioc_required", 
+    "warnings_are_errors",
+    "r_check_args")
+  vals = c(TRUE, TRUE, TRUE,
+    "--as-cran")
+  df = data.frame(tag = btags,
+    val = vals,
+    stringsAsFactors = FALSE)
+  tag_check = df$tag %in% tags
   if (!all(tag_check)) {
-    btags = btags[ !tag_check ]
-    for (itag in btags) {
-      parsed_yaml[itag] = TRUE
+    df = df[ !tag_check, , drop = FALSE]
+    for (irow in seq(nrow(df))) {
+      val = df$val[irow]
+      itag = df$tag[irow]
+      if (val == "TRUE") {
+        val = TRUE
+      }
+      parsed_yaml[itag] = val
     }
     yml = as.yaml(parsed_yaml)
     writeLines(yml, con = yaml_file)

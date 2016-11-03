@@ -67,8 +67,10 @@ while(length(neuro_deps) > 0) {
     }
 }
 
+list_install_order = install_order
 install_order = unlist(install_order)
 outfile = file.path(pop_path,
     "install_order.Rda")
 save(install_order,
+    list_install_order,
     file = outfile)
