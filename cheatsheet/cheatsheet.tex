@@ -1,0 +1,248 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Python Cheat Sheet
+% baposter Landscape Poster
+% LaTeX Template
+% Version 1.0 (11/06/13)
+% baposter Class Created by:
+% Brian Amberg (baposter@brian-amberg.de)
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Edited by Michelle Cristina de Sousa Baltazar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------
+
+\documentclass[landscape,a0paper,fontscale=0.285]{baposter} % Adjust the font scale/size here
+\input{knitr_head.tex}
+
+\title{Neuroconductor Cheat Sheet New}
+\usepackage[utf8]{inputenc}
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Directory in which figures are stored
+
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tabu}
+
+\usepackage{mathtools}
+%\usepackage{amsmath} % For typesetting math
+\usepackage{amssymb} % Adds new symbols to be used in math mode
+
+\usepackage{booktabs} % Top and bottom rules for tables
+\usepackage{enumitem} % Used to reduce itemize/enumerate spacing
+\usepackage{palatino} % Use the Palatino font
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+
+\usepackage{multicol} % Required for multiple columns
+\setlength{\columnsep}{1.5em} % Slightly increase the space between columns
+\setlength{\columnseprule}{0mm} % No horizontal rule between columns
+
+\usepackage{tikz} % Required for flow chart
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes,arrows} % Tikz libraries required for the flow chart in the template
+
+\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}
+
+\usepackage{array}
+
+\definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines the color used for content box headers
+
+%%% John commands standardized
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\emph{#1}}
+\newcommand{\rlang}{\texttt{R}}
+
+
+\begin{document}
+
+\begin{poster}
+{
+headerborder=closed, % Adds a border around the header of content boxes
+colspacing=0.8em, % Column spacing
+bgColorOne=white, % Background color for the gradient on the left side of the poster
+bgColorTwo=white, % Background color for the gradient on the right side of the poster
+borderColor=lightblue, % Border color
+headerColorOne=black, % Background color for the header in the content boxes (left side)
+headerColorTwo=lightblue, % Background color for the header in the content boxes (right side)
+headerFontColor=white, % Text color for the header text in the content boxes
+boxColorOne=white, % Background color of the content boxes
+textborder=roundedleft, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
+eyecatcher=true, % Set to false for ignoring the left logo in the title and move the title left
+headerheight=0.1\textheight, % Height of the header
+headershape=roundedright, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
+headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
+%textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
+linewidth=2pt % Width of the border lines around content boxes
+}
+%----------------------------------------------------------------
+%	TÍTULO
+%----------------------------------------------------------------
+{\bf\textsc{Neuroconductor Cheat Sheet}\vspace{0.5em}} % Poster title
+{\textsc{\{ N e u r o c o n d u c t o r \ \ \ \ C h e a t \ \ \ \ S h e e t \} \hspace{12pt}}}
+{\textsc{John Muschelli \\ (Johns Hopkins University) \hspace{12pt}}} 
+
+%------------------------------------------------
+% BÁSICO DO PYTHON
+%------------------------------------------------
+\headerbox{Image Objects:}{name=objects,column=0,span=2,row=0}{
+
+%--------------------------------------
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Types:}}
+\begin{itemize}\compresslist
+\item \code{nifti} (\pkg{oro.nifti}) - 3D array with header information, data in memory
+\item \code{antsImage} (\pkg{ANTsR}) - C\code{++} pointer, not in memory
+\item \code{niftiImage} (\pkg{RNifti}) - C\code{++} pointer, not in memory
+\end{itemize}
+
+
+%--------------------------------------
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Manipulation:}} \linebreak \linebreak
+\code{nifti} objects\\
+%\begin{tabular}{l l l}
+\begin{tabular}{m{4cm} m{3cm} l}
+\textbf{}\\
+Comparison Operators & \code{>}, \code{>=}, \code{<}, \code{<=}, \code{==}, \code{!=} & Logical image \\
+Arithmetic & \code{+}, \code{-}, \code{*}, \code{/} & Numeric image \\
+In operator & \code{\%in\%} & Logical vector 
+\end{tabular}
+
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Conversion:}} \linebreak \linebreak
+How to convert {\bf to} \code{nifti} objects from:\\
+\begin{tabular}{m{3cm} m{5cm} m{7cm}}
+\textbf{}\\
+Type & function & Description \\
+\code{antsImage} & \code{extrantsr::ants2oro} & Writes out image, reads in as a \code{nifti} \\
+\code{antsImage} & \code{extrantsr::ants2oro(aimg, reference = img)} & Uses the \code{img} \code{nifti} object as header, faster \\
+\code{niftiImage} & \code{oro.nifti::nii2oro(aimg)} & Extracts \code{aimg} array, then copies header to \code{nifti} object 
+\end{tabular}
+
+\dotfill \newline
+
+How to convert {\bf from} \code{nifti} objects to: \\
+\begin{tabular}{m{3cm} m{5cm} m{7cm}}
+\textbf{}\\
+Type & function & Description \\
+\code{antsImage} & \code{extrantsr::oro2ants} & Writes out image, reads in as a \code{antsImage} \\
+\code{antsImage} & \code{extrantsr::oro2ants(aimg, reference = img)} & Uses the \code{img} \code{antsImage} object as header, faster \\
+\code{niftiImage} & \code{oro.nifti::oro2nii(aimg)} & Writes out image, reads in as a \code{niftiImage}
+\end{tabular}
+
+\vspace{0.0em} % When there are two boxes, some whitespace may need to be added if the one on the right has more content
+}
+%--------------------------------------
+\headerbox{Image Plotting:}{name=plots,column=0,span=2,row=0, below = objects}{
+
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Types of Plots:}}
+%\begin{tabular}{lp{2.0cm}lp{3.0cm}|}
+\begin{tabular}{m{6cm} m{9cm}}
+\textbf{}\\
+Function & Output \\
+\code{oro.nifti::orthographic} & 3-planar view of axial, sagittal, and coronal brain \\
+\code{oro.nifti::image} & Prints slices of an image, make sure \code{plot.type = "single"} for only one slice \\
+\code{neurobase::ortho2} & Similar to \code{oro.nifti::orthographic}, but different defaults, cross-hairs, and terms of location \\
+ & When \code{ortho2(x, y)} is called, zeros in \code{y} are set to \code{NA}, assuming \code{y} is an overlay \\
+\code{neurobase::double\_ortho(x, y)} & Two side-by-side orthographic views \\
+\code{neurobase::multi\_overlay} & Takes in a {\bf list}; plots one slice side-by-side from each image in the list \\
+\code{oro.nifti::overlay} & Single slice from \code{x} with \code{y} slice overlaid, similar to \code{image} with \code{plot.type} 
+\end{tabular}
+
+
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Operations for Better Plots:}}
+%\begin{tabular}{lp{2.0cm}lp{3.0cm}|}
+\begin{tabular}{m{6cm} m{9cm}}
+\textbf{}\\
+Function & Result \\
+\code{neurobase::robust_window} & Sets values above the 99.9$^{th}$ quantile to that quantile, makes images brighter \\
+\code{neurobase::dropEmptyImageDimensions} & Removes dimensions with all zeros (background).  Warning: changes image dimensions \\
+& Usually pass a mask, and use the \code{other.imgs} argument \\
+\end{tabular}
+
+
+\vspace{0.0em} % When there are two boxes, some whitespace may need to be added if the one on the right has more content
+}
+
+
+
+
+%------------------------------------------------
+% Listas no Python
+%------------------------------------------------
+
+\headerbox{Listas no Python}{name=results,column=2,span=1,row=0}{
+
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Listas no Python}}
+\linebreak \\
+Listas são compostas por elementos de qualquer tipo (podem ser alteradas) \linebreak \\
+\begin{tabular}{@{}ll@{}}
+\textbf{Manipulação de Listas no Python}\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Criação} \\
+uma\_lista = [5,3,'p',9,'e'] & cria: [5,3,'p',9,'e'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Acessando} \\
+uma\_lista[0] & retorna: 5 \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Fatiando} \\
+uma\_lista[1:3] & retorna: [3,'p'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Comprimento} \\
+len(uma\_lista) & retorna: 5 \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}count( item)} \\
+\multicolumn{2}{l}{Retorna quantas vezes o item foi encontrado na lista.} \\
+cont(uma\_lista('p') & retorna: 1 \\
+\multicolumn{2}{l}{Pode ser usado juntamente com a função while para 'andar' pelo comprimento da lista:} \\
+while x < len(uma\_lista): & retorna: [3,'p']\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Ordenar - sort()} \\
+uma\_lista.sort() & retorna: [3,5,9,'e','p'] \\
+\multicolumn{2}{l}{Ordenar sem alterar a lista} \\
+print(sorted(uma\_lista)) & retorna: [3,5,9,'e','p'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Adicionar - append(item)} \\
+uma\_lista.append(37) & retorna: [5,3,'p',9,'e',37] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Inserir - insert(position,item)} \\
+insert(uma\_lista.append(3),200) & retorna: [5,3,200,'p',9,'e'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Retornar e remover - pop(position)} \\
+uma\_lista.pop() & retorna: 'e' e a lista fica [5,3,'p',9] - remove o último elemento \\
+uma\_lista.pop(1) & retorna: 3 e a lista fica [5,'p',9,'e'] - remove o elemento 1 \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Remover - remove(item)} \\
+uma\_lista.remove('p') & retorna: [5,3,9,'e'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Inserir} \\
+uma\_lista.insert(2,'z') & retorna: [5,'z',3,'p',9,'e'] - insere na posição numerada \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Inverter - reverse()} \\
+reverse(uma\_lista) & retorna: ['e',9,'p',3,5] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Concatenar} \\
+uma\_lista+[0] & retorna: [5,3,'p',9,'e',0] \\
+uma\_lista+uma\_lista & retorna: [5,3,'p',9,'e',5,3,'p',9,'e'] \\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}Encontrar} \\
+9 in uma\_lista & retorna: True \\
+for x in uma\_lista & retorna toda a lista, um elemento por linha \\
+......print(x) &  
+\end{tabular}
+%------------------------------------------------
+}
+\end{poster}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%    SEGUNDA PÁGINA    %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{poster}
+{
+headerborder=closed, colspacing=0.8em, bgColorOne=white, bgColorTwo=white, borderColor=lightblue, headerColorOne=black, headerColorTwo=lightblue, 
+headerFontColor=white, boxColorOne=white, textborder=roundedleft, eyecatcher=true, headerheight=0.1\textheight, headershape=roundedright, headerfont=\Large\bf\textsc, linewidth=2pt 
+}
+%----------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------
+{\bf\textsc{Python Cheat Sheet}\vspace{0.5em}} % Poster title
+{\textsc{\{ P y t h o n \ \ \ \ \ C h e a t \ \ \ \ \ S h e e t\} \hspace{12pt}}}
+{\textsc{Michelle Cristina de Sousa Baltazar \\ (Universidade Federal do Triângulo Mineiro) \hspace{12pt}}} 
+
+
+\end{poster}
+\end{document}
