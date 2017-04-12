@@ -1,0 +1,232 @@
+\documentclass[10pt]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{latexsym, marvosym}
+\usepackage{pifont}
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[bottom]{footmisc}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\setlist[description]{leftmargin=0pt}
+\usepackage{xfrac}
+\usepackage[pdftex,
+            pdfauthor={John Muschelli},
+            pdftitle={Neuroconductor Cheatsheet},
+            pdfsubject={A cheatsheet pdf and reference guide made for Neuroconductor objects and functions.},
+            pdfkeywords={probability} {statistics} {cheatsheet} {pdf} {cheat} {sheet} {formulas} {equations}
+            ]{hyperref}
+\usepackage[
+            open,
+            openlevel=2
+            ]{bookmark}
+\usepackage{relsize}
+\usepackage{rotating}
+
+ \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+    \def\independenT#1#2{\mathrel{\setbox0\hbox{$#1#2$}%
+    \copy0\kern-\wd0\mkern4mu\box0}} 
+            
+\newcommand{\noin}{\noindent}    
+\newcommand{\logit}{\textrm{logit}} 
+\newcommand{\var}{\textrm{Var}}
+\newcommand{\cov}{\textrm{Cov}} 
+\newcommand{\corr}{\textrm{Corr}} 
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Bern}{\textrm{Bern}}
+\newcommand{\Bin}{\textrm{Bin}}
+\newcommand{\Beta}{\textrm{Beta}}
+\newcommand{\Gam}{\textrm{Gamma}}
+\newcommand{\Expo}{\textrm{Expo}}
+\newcommand{\Pois}{\textrm{Pois}}
+\newcommand{\Unif}{\textrm{Unif}}
+\newcommand{\Geom}{\textrm{Geom}}
+\newcommand{\NBin}{\textrm{NBin}}
+\newcommand{\Hypergeometric}{\textrm{HGeom}}
+\newcommand{\HGeom}{\textrm{HGeom}}
+\newcommand{\Mult}{\textrm{Mult}}
+
+\geometry{top=.4in,left=.2in,right=.2in,bottom=.4in}
+
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+\setcounter{secnumdepth}{0}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+% -----------------------------------------------------------------------
+
+\usepackage{titlesec}
+
+\titleformat{\section}
+{\color{blue}\normalfont\large\bfseries}
+{\color{blue}\thesection}{1em}{}
+\titleformat{\subsection}
+{\color{cyan}\normalfont\normalsize\bfseries}
+{\color{cyan}\thesection}{1em}{}
+% Comment out the above 5 lines for black and white
+
+
+%%% John commands standardized
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\emph{#1}}
+\newcommand{\rlang}{\texttt{R}}
+\newcommand{\TRUE}{\texttt{TRUE}}
+\newcommand{\FALSE}{\texttt{FALSE}}
+
+\usepackage{longtable}
+
+\begin{document}
+
+
+\clearpage 
+General R Functions:
+\begin{longtable}{lll}
+Function & Package & Purpose \\ \hline
+\code{aes} & \pkg{ggplot2} & Defines ``aesthetics'' for a \pkg{ggplot2} object  \\
+\code{all} & \pkg{base} & Returns \TRUE if all the values of a vector are \TRUE \\
+\code{alpha} & \pkg{scales} & Changes the opacity of a color \\
+\code{arrange} & \pkg{dplyr} & Sorts rows of a \code{data.frame} based on a variable \\
+\code{as.data.frame} & \pkg{base} & Coerces an object to a \code{data.frame} \\
+\code{basename} & \pkg{base} & Extracts the name of a file from a file path\\
+\code{biocLite} & \pkg{BiocInstaller} & Install Bioconductor packages \\
+\code{boxplot} & \pkg{base} & Plots a box and whisker plot \\
+\code{brewer\_pal} & \pkg{scales} & Creates a palette of colors from ColorBrewer \\
+\code{c} & \pkg{base} & Combines elements into a vector \\
+\code{cbind} & \pkg{base} & Performs binding by column \\
+\code{class} & \pkg{base} & Returns the class of an object \\
+\code{colMeans} & \pkg{base} & Performs the column means on a matrix/\code{data.frame} \\
+\code{cut} & \pkg{base} & Separates a vector into a factor based on a set of breaks \\
+\code{data.frame} & \pkg{base} & Creates a \code{data.frame} object \\
+\code{density} & \pkg{base} & Estimates a kernel density estimate from a vector\\
+\code{desc} & \pkg{dplyr} & A helper function, used with \code{arrange} to specify descending sorting \\
+\code{dim} & \pkg{base} & Gets the dimensions of an object \\
+\code{do.call} & \pkg{base} & Performs a call to a specific function with a list of arguments \\
+\code{example} & \pkg{base} & Runs the code in the example section of a function's help file \\
+\code{file.exists} & \pkg{base} & Tests whether a file exists on the hard disk \\
+\code{file.path} & \pkg{base} & Pastes directories and file names together to form a file path \\
+\code{file.remove} & \pkg{base} & Removes files from the hard disk \\
+\code{floor} & \pkg{base} & Rounds numbers down to the nearest integer \\
+\code{format\_sci} & \pkg{knitr} & Formats numbers using scientific notation \\
+\code{geom\_line} & \pkg{ggplot2} & Adds a line layer to a ggplot \\
+\code{ggplot} & \pkg{ggplot2} & Creates a \code{ggplot2} plot object \\
+\code{gradient\_n\_pal} & \pkg{scales} & Creates a palette of colors based on a number of gradients \\
+\code{gray} & \pkg{base} & Returns colors based on white to black in grayscale \\
+\code{grep} & \pkg{base} & Searches a string for a regular expression and returns the index of characters that contain that string  \\
+\code{group\_by} & \pkg{dplyr} & Groups a \code{data.frame} by sets of factors \\
+\code{head} & \pkg{base} & Prints the first set of elements of an object\\
+\code{hi\_latex} & \pkg{knitr} & Highlighter for LaTeX\\
+\code{hist} & \pkg{base} & Calculates and plots a histogram of a vector\\
+\code{image} & \pkg{graphics} & Plots a 2-D grid of an image\\
+\code{install\_github} & \pkg{devtools} & Command that can install packages from GitHub \\
+\code{install.packages} & \pkg{base} & General installer for CRAN and other packages. \\
+\code{is.numeric} & \pkg{base} & Test whether a vector is numeric or not\\
+\code{lapply} & \pkg{base} & Apply a function to each element of a list and return a list \\
+\code{length} & \pkg{base} & Returns the number of elements in an object\\
+\code{library} & \pkg{base} & Loads a package into memory so functions can be used. \\
+\code{lines} & \pkg{base} & Adds lines to a base R plot \\
+\code{list} & \pkg{base} & Constructs a list object \\
+\code{list.files} & \pkg{base} & Returns a list of files from a path based on a file pattern \\
+\code{mapply} & \pkg{base} & Multi-apply function for running functions over linked lists \\
+\code{matrix} & \pkg{base} & Constructs a matrix object \\
+\code{max} & \pkg{base} & Calculates the maximum over a vector \\
+\code{names} & \pkg{base} & Extracts the names of an object \\
+\code{options} & \pkg{base} & Set global options in R\\
+\code{pandoc.table} & \pkg{pander} & Prints out tables nicely for HTML slides \\
+\code{par} & \pkg{base} & Set of parameters relevant to plotting \\
+\code{paste} & \pkg{base} & Concatenates strings together, separated by spaces by default \\
+\code{paste0} & \pkg{base} & Concatenates strings together, separated by nothing by default  \\
+\code{plot} & \pkg{base} & General plotting function for the R base \\
+\code{print} & \pkg{base} & Shows an object \\
+\code{quantile} & \pkg{base} & Estimates the quantiles of a vector, based on the probabilities given, otherwise the standard quantiles \\
+\code{range} & \pkg{base} & Returns the min and maximum values \\
+\code{return} & \pkg{base} & Used in making functions, determines what the function should output \\
+\code{rm} & \pkg{base} & Removes objects from memory in R\\
+\code{rownames} & \pkg{base} & Extract the row names of an object (matrix or data.frame) \\
+\code{sapply} & \pkg{base} & Apply a function to each element of a list and return a simplified object if possible \\
+\code{seq} & \pkg{base} & Generates a sequence of numbers \\
+\code{source} & \pkg{base} & Loads in an R script \\
+\code{strsplit} & \pkg{base} & Splits a character vector by a splitting string \\
+\code{system.file} & \pkg{base} & Returns the paths of files on the hard disk for installed packages\\
+\code{t} & \pkg{base} & Transposes a matrix/vector \\
+\code{table} & \pkg{base} & Performs a simple tabulations of the unique values of a vector\\
+\code{tally} & \pkg{dplyr} & Counts the number of rows in a \code{data.frame}, usually used with \code{group\_by} \\
+\code{text} & \pkg{base} & Adds text to a base plot \\
+\code{unique} & \pkg{base} & Returns the unique values of a vector \\
+\code{which} & \pkg{base} & Returns the indices that are \TRUE from an object, also can return array indices \\ \hline
+\end{longtable}
+
+\clearpage 
+
+Imaging Specific Functions:
+
+\begin{tabular}{lll}
+Function & Package & Purpose \\ \hline
+\code{applyEmptyImageDimensions} & \pkg{neurobase} & Applies indices to drop dimensions from \code{getEmptyImageDimensions} \\
+\code{bias\_correct} & \pkg{extrantsr} & Performs N3 or N4 Bias-field correction \\
+\code{check\_nifti} & \pkg{neurobase} & Ensures the output is a \code{nifti} object or list of \code{nifti} objects \\
+\code{dicom2nifti} & \pkg{oro.dicom} & Converts a list of \code{dicom} files to a \code{nifti} object \\
+\code{dicomTable} & \pkg{oro.dicom} & Converts a list of \code{dicom} headers into a \code{data.frame} \\
+\code{dim} & \pkg{base} & Gets the dimensions of an object \\
+\code{double\_ortho} & \pkg{neurobase} & Plots 2 orthographic images side-by-side \\
+\code{download\_img\_data} & \pkg{WhiteStripe} & Downloads example image data for \code{whitestripe} \\
+\code{dropEmptyImageDimensions} & \pkg{neurobase} & Drops empty image dimensions from a \code{nifti} object, combines \code{getEmptyImageDimensions} and \code{applyEmptyImageDimensions} \\
+\code{fast} & \pkg{fslr} & Performs tissue-class segmentation using the FAST algorithm \\
+\code{fslbet} & \pkg{fslr} & Runs the brain extraction tool (BET) from FSL \\
+\code{fslbet\_robust} & \pkg{extrantsr} & Runs neck removal, bias correction, BET, re-estimates a center of gravity, then BET again \\
+\code{get\_image\_filenames\_list\_by\_subject} & \pkg{ms.lesion} & Returns a list of file names for images by subject.  Different types returns different files \\
+\code{get\_t1\_filenames} & \pkg{kirby21} & Returns a list of file names for T1 images from Kirby21 \\
+\code{have\_fsl} & \pkg{fslr} & Logical test to see if FSL is installed, useful for examples \\
+\code{image.nifti} & \pkg{graphics} & Plots a slice of a \code{nifti}.  By default, plots all slices. \\
+\code{install\_dcm2nii} & \pkg{dcm2niir} & Installs the \code{dcm2nii} binary for executing DICOM to NIfTI conversions \\
+\code{malf} & \pkg{extrantsr} & Multi-atlas label fusion function for segmenting structures based on registration\\
+\code{mask\_vals} & \pkg{neurobase} & Returns the values of an image for voxels within a mask \\
+\code{mass\_images} & \pkg{malf.template.} & A set of template images and masks used for MALF \\
+\code{multi\_overlay} & \pkg{neurobase} & Takes a list of images and plots one slice of each image side-by-side \\
+\code{nii.stub} & \pkg{neurobase} & Removes the \code{nii} or \code{nii.gz} extensions from a file name \\
+\code{oMask} & \pkg{extrantsr} & Calls \code{getMask} from \code{ANTsR} to get a coarse mask \\
+\code{ortho2} & \pkg{neurobase} & Plots an orthographic image, different defaults than \code{orthographic} \\
+\code{orthographic} & \pkg{oro.nifti} & Plots an orthographic image \\
+\code{otropos} & \pkg{extrantsr} & Runs Atropos k-means segmentation \\
+\code{overlay} & \pkg{oro.nifti} & Displays a slice of an image overlaid with the slice of another \\
+\code{plot\_densities} & no package & Defined function we made to plot the densities of the tissue classes after normalization \\
+\code{readDICOM} & \pkg{oro.dicom} & Reads in a DICOM image and returns a list of the header and image values \\
+\code{readnii} & \pkg{neurobase} & Reads in NIfTI files \\
+\code{robust\_window} & \pkg{neurobase} & Calculates the min and 99.9$^th$ quantiles and sets anything outside those values to those values\\
+\code{slice} & \pkg{oro.nifti} & Similar to image for \code{nifti} objects, but only returns one slice by default \\
+\code{voxres} & \pkg{oro.nifti} & Returns the 3 voxel dimensions in millimeters \\
+\code{whitestripe} & \pkg{WhiteStripe} & Estimates the voxels within the White Stripe from an image\\
+\code{whitestripe\_norm} & \pkg{WhiteStripe} & Applies the White Stripe to an image to normalize it\\
+\code{within\_visit\_registration} & \pkg{extrantsr} & Performs registration of a list of images to the first image, aka co-registration\\
+\code{writenii} & \pkg{neurobase} & Writes a \code{nifti} object to a NIfTI file on hard disk \\
+\code{xyz} & \pkg{neurobase} & Estimates the indices of the center of gravity of an image \\
+\code{zscore\_img} & \pkg{neurobase} & Performs z-score normalization, using the mean and standard deviation, by default\\ \hline
+\end{tabular}
+
+
+\end{document}
+
