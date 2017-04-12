@@ -358,3 +358,15 @@ make_travis = function(local_path){
     ".travis.yml")
   file.copy(template_path, outfile)
 }
+
+total_number_of_commits = function(user, repo) {
+  commits = gh::gh(paste0("GET /repos/", user, "/", repo, 
+                           "/stats/contributors"))
+  auths = sapply(commits, function(x) x$author$login)
+  n_commits = sapply(commits, function(x) x$total)  
+  df = cbind(author = auths, n_commits = n_commits)
+  df = data.frame(df, stringsAsFactors = FALSE)
+  df$n_commits = as.numeric(df$n_commits)
+  return(df)
+}
+

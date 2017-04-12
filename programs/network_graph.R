@@ -4,7 +4,7 @@
 rm( list = ls())
 library(git2r)
 library(devtools)
-library(gh) # from install_github("gaborcsardi/gh")
+library(gh) # from install_github("r-pkgs/gh")
 library(igraph)
 library(networkD3)
 
@@ -70,8 +70,7 @@ pkgs = sapply(info, function(x) {
   x$Package
 })
 dep_grab = c("Depends", "Imports", 
-             "LinkingTo", "Suggests",
-             "Enhances")
+             "LinkingTo", "Suggests")
 tdeps = lapply(info, function(xx) {
   run_pack = xx$Package
   print(run_pack)

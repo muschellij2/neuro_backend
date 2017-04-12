@@ -211,42 +211,42 @@ Function & Package & Purpose \\ \hline
 \code{cut} & \pkg{base} & Separates a vector into a factor based on a set of breaks \\
 \code{data.frame} & \pkg{base} & Creates a \code{data.frame} object \\
 \code{density} & \pkg{base} & Estimates a kernel density estimate from a vector\\
-\code{desc} & \pkg{dplyr} & A helper function, used with \code{arrange} to specify descending sorting \\
-\code{dicom2nifti} & \pkg{oro.dicom} & Converts a list of \code{dicom} files to a \code{nifti} object \\
-\code{dicomTable} & \pkg{oro.dicom} & Converts a list of \code{dicom} headers into a \code{data.frame} \\
-\code{dim} & \pkg{base} & Gets the dimensions of an object \\
-\code{do.call} & \pkg{base} & Performs a call to a specific function with a list of arguments \\
-\code{double\_ortho} & \pkg{neurobase} & Plots 2 orthographic images side-by-side \\
-\code{download\_img\_data} & \pkg{WhiteStripe} & Downloads example image data for \code{whitestripe} \\
-\code{dropEmptyImageDimensions} & \pkg{neurobase} & Drops empty image dimensions from a \code{nifti} object, a combination of \code{getEmptyImageDimensions} and \code{applyEmptyImageDimensions} \\
-\code{example} & \pkg{base} & Runs the code in the example section of a function's help file \\
-\code{fast} & \pkg{fslr} & Performs tissue-class segmentation using the FAST algorithm \\
-\code{file.exists} & \pkg{base} & Tests whether a file exists on the hard disk \\
-\code{file.path} & \pkg{base} & Pastes directories and file names together to form a file path \\
-\code{file.remove} & \pkg{base} & Removes files from the hard disk \\
-\code{floor} & \pkg{base} & Rounds numbers down to the nearest integer \\
-\code{format\_sci} & \pkg{knitr} & Formats numbers using scientific notation \\
-\code{fslbet} & \pkg{fslr} & Runs the brain extraction tool (BET) from FSL \\
-\code{fslbet\_robust} & \pkg{extrantsr} & Runs neck removal, bias correction, BET, re-estimates a center of gravity, then BET again \\
-\code{geom\_line} & \pkg{ggplot2} & Adds a line layer to a ggplot \\
-\code{get\_image\_filenames\_list\_by\_subject} & \pkg{ms.lesion} & Returns a list of file names for images by subject.  Different types returns different files \\
-\code{get\_t1\_filenames} & \pkg{kirby21} & Returns a list of file names for T1 images from Kirby21 \\
-\code{ggplot} & \pkg{ggplot2} & Creates a \code{ggplot2} plot object \\
-\code{gradient\_n\_pal} & \pkg{scales} & Creates a palette of colors based on a number of gradients \\
-\code{gray} & \pkg{base} & Returns colors based on white to black in grayscale \\
-\code{grep} & \pkg{base} & Searches a string for a regular expression and returns the index of characters that contain that string  \\
-\code{group\_by} & \pkg{dplyr} & Groups a \code{data.frame} by sets of factors \\
-\code{have\_fsl} & \pkg{fslr} & Logical test to see if FSL is installed, useful for examples \\
-\code{head} & \pkg{base} & Prints the first set of elements of an object\\
-\code{hi\_latex} & \pkg{knitr} & Highlighter for LaTeX\\
-\code{hist} & \pkg{base} & Calculates and plots a histogram of a vector\\
-\code{image} & \pkg{graphics} & Plots a 2-D grid of an image\\
-\code{image.nifti} & \pkg{graphics} & Plots a slice of a \code{nifti}.  By default, plots all slices. \\
-\code{install\_dcm2nii} & \pkg{dcm2niir} & Installs the \code{dcm2nii} binary for executing DICOM to NIfTI conversions \\
-\code{install\_github} & \pkg{devtools} & Command that can install packages from GitHub \\
-\code{install.packages} & \pkg{base} & General installer for CRAN and other packages. \\
-\code{is.numeric} & \pkg{base} & Test whether a vector is numeric or not\\
-\code{lapply} & \pkg{base} & Apply a function to each element of a list and return a list \\
+\code{desc} & \pkg{dplyr} & A helper function, used with \code{arrange} to specify descenind \\
+\code{dicom2nifti} & \pkg{oro.dicom} & \\
+\code{dicomTable} & \pkg{oro.dicom} & \\
+\code{dim} & \pkg{base} & \\
+\code{do.call} & \pkg{base} & \\
+\code{double\_ortho} & \pkg{neurobase} & \\
+\code{download\_img\_data} & \pkg{WhiteStripe} & \\
+\code{dropEmptyImageDimensions} & \pkg{neurobase} & \\
+\code{example} & \pkg{base} & \\
+\code{fast} & \pkg{fslr} & \\
+\code{file.exists} & \pkg{base} & \\
+\code{file.path} & \pkg{base} & \\
+\code{file.remove} & \pkg{base} & \\
+\code{floor} & \pkg{base} & \\
+\code{format\_sci} & \pkg{knitr} & \\
+\code{fslbet} & \pkg{fslr} & \\
+\code{fslbet\_robust} & \pkg{extrantsr} & \\
+\code{geom\_line} & \pkg{ggplot2} & \\
+\code{get\_image\_filenames\_list\_by\_subject} & \pkg{ms.lesion} & \\
+\code{get\_t1\_filenames} & \pkg{kirby21} & \\
+\code{ggplot} & \pkg{ggplot2} & \\
+\code{gradient\_n\_pal} & \pkg{scales} & \\
+\code{gray} & \pkg{base} & \\
+\code{grep} & \pkg{base} & \\
+\code{group\_by} & \pkg{dplyr} & \\
+\code{have\_fsl} & \pkg{fslr} & \\
+\code{head} & \pkg{base} & \\
+\code{hi\_latex} & \pkg{knitr} & \\
+\code{hist} & \pkg{base} & \\
+\code{image} & \pkg{graphics} & \\
+\code{image.nifti} & \pkg{graphics} & \\
+\code{install\_dcm2nii} & \pkg{dcm2niir} & \\
+\code{install\_github} & \pkg{devtools} & \\
+\code{install.packages} & \pkg{base} & \\
+\code{is.numeric} & \pkg{base} & \\
+\code{lapply} & \pkg{base} & \\
 \code{length} & \pkg{base} & \\
 \code{library} & \pkg{base} & \\
 \code{lines} & \pkg{base} & \\
@@ -282,7 +282,7 @@ Function & Package & Purpose \\ \hline
 \code{rm} & \pkg{base} & \\
 \code{robust\_window} & \pkg{neurobase} & \\
 \code{rownames} & \pkg{base} & \\
-\code{sapply} & \pkg{base} & Apply a function to each element of a list and return a simplified object if possible \\
+\code{sapply} & \pkg{base} & \\
 \code{seq} & \pkg{base} & \\
 \code{set} & \pkg{} & \\
 \code{slice} & \pkg{oro.nifti} & \\
